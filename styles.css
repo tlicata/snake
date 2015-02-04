@@ -1,0 +1,7 @@
+#game {
+    overflow: hidden;
+}
+.square {
+    float: left;
+    text-align: center;
+}

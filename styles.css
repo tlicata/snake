@@ -5,3 +5,13 @@
     float: left;
     text-align: center;
 }
+
+.square.apple {
+    background-color: red;
+}
+.square.empty {
+    background-color: black;
+}
+.square.snake {
+    background-color: green;
+}

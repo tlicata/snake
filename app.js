@@ -29,6 +29,7 @@ $(document).ready(function () {
   var tiles = [];
   var snake = [];
   var snakeDirection = RIGHT;
+  var snakeGrow = 0;
 
   var generateBoard = function () {
     var board = [];
@@ -66,9 +67,6 @@ $(document).ready(function () {
     }
   };
 
-  var randomSquare = function (board) {
-    return Math.floor(Math.random() * TOTAL_SQUARES);
-  };
   var getNeighbor = function (square, direction) {
     if (direction === LEFT) {
       return square % BOARD_WIDTH === 0 ? null : square - 1;
@@ -83,26 +81,33 @@ $(document).ready(function () {
     return null;
   };
 
-  var getNewSnake = function (oldSnake, direction) {
+  var getNewSnake = function (oldSnake, direction, board) {
     var newSnake = oldSnake.concat();
     var oldHead = oldSnake[0];
     var newHead = getNeighbor(oldHead, direction);
     if (newHead === null) {
       return null;
     }
+    if (board[newHead] === APPLE) {
+      snakeGrow += 1;
+    }
     newSnake.unshift(newHead);
-    newSnake.pop();
+    if (snakeGrow > 0) {
+      snakeGrow = snakeGrow - 1;
+    } else {
+      newSnake.pop();
+    }
     return newSnake;
   };
 
-  var updateSnakeDisplay = function (oldSnake, newSnake) {
+  var updateSnakeDisplay = function (oldSnake, newSnake, board) {
     oldSnake.forEach(function (square) {
       tiles[square] = EMPTY;
     });
     newSnake.forEach(function (square) {
-      tiles[square] = SNAKE;
+      board[square] = SNAKE;
     });
-    displayBoard(tiles);
+    return board;
   };
 
   var snakeHitsSelf = function (body) {
@@ -110,23 +115,48 @@ $(document).ready(function () {
     return body.indexOf(head, 1) !== -1;
   };
 
+  var randomSquare = function (board) {
+    return Math.floor(Math.random() * TOTAL_SQUARES);
+  };
+  var addNewSnake = function (board) {
+    var start = randomSquare();
+    snake = [start, start-1, start-2, start-3];
+    snake.forEach(function (square) {
+      board[square] = SNAKE;
+    });
+    return board;
+  };
+  var addNewApple = function (board) {
+    var spot = randomSquare();
+    if (board[spot] === EMPTY) {
+      board[spot] = APPLE;
+    } else {
+      return addNewApple(board);
+    }
+    return board;
+  };
   var initialize = function () {
     var start = randomSquare();
     tiles = generateBoard();
+    tiles = addNewSnake(tiles);
+    tiles = addNewApple(tiles);
+    tiles = addNewApple(tiles);
     displayBoard(tiles);
-    snake = [start, start-1, start-2, start-3];
-    updateSnakeDisplay([], snake);
   };
   initialize();
 
   var loop = setInterval(function () {
     var oldSnake = snake.concat();
-    snake = getNewSnake(oldSnake, snakeDirection);
+    snake = getNewSnake(oldSnake, snakeDirection, tiles);
     if (snake === null || snakeHitsSelf(snake)) {
       clearInterval(loop);
       alert("you died");
     } else {
-      updateSnakeDisplay(oldSnake, snake);
+      if (tiles[snake[0]] === APPLE) {
+        tiles = addNewApple(tiles);
+      }
+      tiles = updateSnakeDisplay(oldSnake, snake, tiles);
+      displayBoard(tiles);
     }
   }, 115);
 

@@ -72,13 +72,13 @@ $(document).ready(function () {
 
   var getNeighbor = function (square, direction) {
     if (direction === LEFT) {
-      return square % BOARD_WIDTH === 0 ? null : square - 1;
+      return square % BOARD_WIDTH === 0 ? square + BOARD_WIDTH - 1 : square - 1;
     } else if (direction === RIGHT) {
-      return square % BOARD_WIDTH === BOARD_WIDTH - 1 ? null : square + 1;
+      return square % BOARD_WIDTH === BOARD_WIDTH - 1 ? square - BOARD_WIDTH + 1 : square + 1;
     } else if (direction === DOWN) {
-      return square > TOTAL_SQUARES - BOARD_WIDTH ? null : square + BOARD_WIDTH;
+      return square > TOTAL_SQUARES - BOARD_WIDTH ? square % BOARD_WIDTH : square + BOARD_WIDTH;
     } else if (direction === UP) {
-      return square < BOARD_WIDTH ?  null : square - BOARD_WIDTH;
+      return square < BOARD_WIDTH ?  TOTAL_SQUARES - BOARD_WIDTH + (square % BOARD_WIDTH) : square - BOARD_WIDTH;
     }
     console.log("invalid direction", direction);
     return null;

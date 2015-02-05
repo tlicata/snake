@@ -6,6 +6,7 @@ $(document).ready(function () {
   var EMPTY_CLASS = "empty";
   var SNAKE_CLASS = "snake";
   var APPLE_CLASS = "apple";
+  var CLASSES_STRING = [EMPTY_CLASS, SNAKE_CLASS, APPLE_CLASS].join(" ");
 
   var CLASSES = {};
   CLASSES[EMPTY] = EMPTY_CLASS;
@@ -59,7 +60,7 @@ $(document).ready(function () {
         square = makeNewSquare(i);
         container.append(square);
       } else {
-        square.removeClass(SNAKE_CLASS, APPLE_CLASS, EMPTY_CLASS);
+        square.removeClass(CLASSES_STRING);
       }
       square.addClass(CLASSES[contents]);
     }

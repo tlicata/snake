@@ -15,9 +15,9 @@ $(document).ready(function () {
 
   var BOARD_WIDTH = 40;        // in squares
   var BOARD_HEIGHT = 25;       // in squares
-  var SQUARE_WIDTH = 10;       // in pixels
-  var SQUARE_HEIGHT = 10;      // in pixels
-  var SQUARE_BORDER_WIDTH = 1; // in pixels
+  var SQUARE_WIDTH = 15;       // in pixels
+  var SQUARE_HEIGHT = 15;      // in pixels
+  var SQUARE_BORDER_WIDTH = 0; // in pixels
 
   var TOTAL_SQUARES = BOARD_WIDTH * BOARD_HEIGHT;
 

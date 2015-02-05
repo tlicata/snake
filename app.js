@@ -148,7 +148,7 @@ $(document).ready(function () {
   };
   initialize();
 
-  var loop = setInterval(function () {
+  var doStep = function () {
     var oldSnake = snake.concat();
     snake = getNewSnake(oldSnake, snakeDirection, tiles);
     if (snake === null || snakeHitsSelf(snake)) {
@@ -161,9 +161,21 @@ $(document).ready(function () {
       tiles = updateSnakeDisplay(oldSnake, snake, tiles);
       displayBoard(tiles);
     }
-  }, 115);
+  };
+
+  var stepTime = 115;
+  var skipNext = false;
+  var loop = setInterval(function () {
+    if (skipNext) {
+      skipNext = false;
+    } else {
+      doStep();
+    }
+  }, stepTime);
 
   $(document).on("keydown", function (event) {
+    var oldDirection = snakeDirection;
+
     if (event.keyCode === 37) {
       snakeDirection = LEFT;
     } else if (event.keyCode === 38) {
@@ -172,6 +184,14 @@ $(document).ready(function () {
       snakeDirection = RIGHT;
     } else if (event.keyCode === 40) {
       snakeDirection = DOWN;
+    }
+
+    if (oldDirection !== snakeDirection) {
+      doStep();
+      skipNext = true;
+      setTimeout(function () {
+        skipNext = false;
+      }, stepTime / 2);
     }
   });
 });

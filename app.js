@@ -52,7 +52,10 @@ $(document).ready(function () {
 
   var displayBoard = function (board) {
     var totalWidth = BOARD_WIDTH * (SQUARE_WIDTH + (SQUARE_BORDER_WIDTH * 2));
-    var container = $("#game").css("width", totalWidth + "px");
+    var container = $("#game").css({
+      border: "solid white 1px",
+      width: totalWidth + "px"
+    });
     var n = board.length;
     for (var i = 0; i < n; i++) {
       var square = container.find("#"+i);

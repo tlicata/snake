@@ -1,4 +1,11 @@
+body {
+    background: black;
+    color: white;
+    text-align: center;
+}
+
 #game {
+    margin: 0 auto;
     overflow: hidden;
 }
 .square {

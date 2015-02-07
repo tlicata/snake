@@ -76,7 +76,7 @@ $(document).ready(function () {
     } else if (direction === RIGHT) {
       return square % BOARD_WIDTH === BOARD_WIDTH - 1 ? square - BOARD_WIDTH + 1 : square + 1;
     } else if (direction === DOWN) {
-      return square > TOTAL_SQUARES - BOARD_WIDTH ? square % BOARD_WIDTH : square + BOARD_WIDTH;
+      return square > TOTAL_SQUARES - BOARD_WIDTH - 1 ? square % BOARD_WIDTH : square + BOARD_WIDTH;
     } else if (direction === UP) {
       return square < BOARD_WIDTH ?  TOTAL_SQUARES - BOARD_WIDTH + (square % BOARD_WIDTH) : square - BOARD_WIDTH;
     }

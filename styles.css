@@ -4,10 +4,23 @@ body {
     text-align: center;
 }
 
-#game {
+#container {
     margin: 0 auto;
+}
+#game, #scores {
     overflow: hidden;
 }
+#scores {
+    display: none;
+}
+
+#scores .current {
+    float: left;
+}
+#scores .best {
+    float: right;
+}
+
 .square {
     float: left;
     text-align: center;

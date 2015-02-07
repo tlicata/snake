@@ -15,6 +15,7 @@ $(document).ready(function () {
 
   var BOARD_WIDTH = 40;        // in squares
   var BOARD_HEIGHT = 25;       // in squares
+  var BOARD_BORDER_WIDTH = 1;  // in pixels
   var SQUARE_WIDTH = 15;       // in pixels
   var SQUARE_HEIGHT = 15;      // in pixels
   var SQUARE_BORDER_WIDTH = 0; // in pixels
@@ -30,6 +31,18 @@ $(document).ready(function () {
   var snake = [];
   var snakeDirection = RIGHT;
   var snakeGrow = 0;
+  var score = 0;
+  var highScore = 0;
+
+  if (window.localStorage) {
+    highScore = window.localStorage.getItem("highScore");
+    if (highScore === null) {
+      highScore = 0;
+    } else {
+      highScore = parseInt(highScore);
+    }
+  }
+  $("#scores .best .count").text(highScore);
 
   var generateBoard = function () {
     var board = [];
@@ -50,12 +63,13 @@ $(document).ready(function () {
     });
   };
 
+  var totalWidth = BOARD_WIDTH * (SQUARE_WIDTH + (SQUARE_BORDER_WIDTH * 2)) + (BOARD_BORDER_WIDTH * 2);
+  var container = $("#container").css({
+    width: totalWidth + "px"
+  }).find("#game").css({
+    border: "solid white " + BOARD_BORDER_WIDTH + "px"
+  });
   var displayBoard = function (board) {
-    var totalWidth = BOARD_WIDTH * (SQUARE_WIDTH + (SQUARE_BORDER_WIDTH * 2));
-    var container = $("#game").css({
-      border: "solid white 1px",
-      width: totalWidth + "px"
-    });
     var n = board.length;
     for (var i = 0; i < n; i++) {
       var square = container.find("#"+i);
@@ -144,6 +158,7 @@ $(document).ready(function () {
     tiles = addNewSnake(tiles);
     tiles = addNewApple(tiles);
     tiles = addNewApple(tiles);
+    $("#scores").show();
     displayBoard(tiles);
   };
   initialize();
@@ -153,9 +168,18 @@ $(document).ready(function () {
     snake = getNewSnake(oldSnake, snakeDirection, tiles);
     if (snake === null || snakeHitsSelf(snake)) {
       clearInterval(loop);
+      if (window.localStorage) {
+        if (score > highScore) {
+          highScore = score;
+          window.localStorage.setItem("highScore", highScore);
+          $("#scores .best .count").text(highScore);
+        }
+      }
       alert("you died");
     } else {
       if (tiles[snake[0]] === APPLE) {
+        score += 1;
+        $("#scores .current .count").text(score);
         tiles = addNewApple(tiles);
       }
       tiles = updateSnakeDisplay(oldSnake, snake, tiles);
